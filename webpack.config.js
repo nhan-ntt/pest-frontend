@@ -70,14 +70,9 @@ const mainConfig = function () {
 				{
 					test: /\.scss$/,
 					use: [
-						MiniCssExtractPlugin.loader,
-						"css-loader",
-						{
-							loader: "sass-loader",
-							options: {
-								sourceMap: true,
-							}
-						},
+						'style-loader',
+						'css-loader',
+						'sass-loader' // This will use Dart Sass by default
 					]
 				},
 			]
