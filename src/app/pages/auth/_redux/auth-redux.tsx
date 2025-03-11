@@ -21,7 +21,24 @@ export const actionTypes = {
   SaveNewPassword: '[Login] SaveNewPassword',
 };
 
-const initialAuthState = {};
+// const initialAuthState = {};
+
+// // Make sure your initial state has reasonable defaults for all fields
+const initialAuthState = {
+  id: undefined,
+  fullName: undefined,
+  email: undefined,
+  role: undefined,
+  accessToken: undefined,
+  isAuthenticated: false,
+  _certificate: {
+    certificateInfo: {
+      timestamp: 0,
+      exp: 0
+    }
+  },
+  _preLoggedIn: false
+};
 
 export const reducer = persistReducer(
   {storage, key: PROJECT_NAME},

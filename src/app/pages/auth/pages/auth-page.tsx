@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useMemo, useState } from 'react';
 import { Link, Switch } from 'react-router-dom';
 import LoginUsername from './login-username';
-import ForgotPassword from './forgot-password';
+import LoginPage from './login-page';
+import RegisterPage from './register-page';
 import '../../../../_metronic/_assets/sass/pages/login/classic/login-1.scss';
 import LoginPassword from './login-password';
 import { FormattedMessage } from 'react-intl';
@@ -9,6 +10,7 @@ import { ToAbsoluteUrl } from '../../../common-library/helpers/assets-helpers';
 import { ContentRoute } from '../../../layout/components/content/content-route';
 import Particles from 'react-tsparticles';
 import '../../../../custom.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //Custom hook
 export function useWindowSize() {
@@ -88,7 +90,7 @@ export function AuthPage() {
       backgroundSize: 'cover',
     },
     linearAside: {
-      // background: `linear-gradient(to top, rgba(14.12%, 14.51%, 16.86%, 0.45) 150px, rgba(22.35%, 22.35%, 22.35%, 0) 100%) no-repeat cover`,
+      background: `linear-gradient(to top, rgba(14.12%, 14.51%, 16.86%, 0.45) 150px, rgba(22.35%, 22.35%, 22.35%, 0) 100%) no-repeat cover`,
       // backgroundImage: `url(${ToAbsoluteUrl('/media/authImage/auth-bg1.jpg')})`,
       backgroundImage: `linear-gradient(to top, #9be15d 0%, #00e3ae 100%)`,
       //   backgroundRepeat: 'no-repeat',
@@ -170,15 +172,25 @@ export function AuthPage() {
               height={height + 'px'}
               params={t as any}
             />
-            {/* <div
+            <div
               className="position-absolute top-0 right-0 text-right mt-5 mb-15 mb-lg-0 flex-column-auto justify-content-center py-5 px-10">
-              <span className="font-weight-bold text-dark-50">
+              {/* <span className="font-weight-bold text-dark-50">
                 <FormattedMessage id="AUTH.GENERAL.NO_ACCOUNT"/>
-              </span>
+              </span> */}
               <Link to="/auth/registration" className="font-weight-bold ml-2" id="kt_login_signup">
-                <FormattedMessage id="AUTH.GENERAL.SIGNUP_BUTTON"/>
+                <button type="button" className="btn btn-primary">
+                  Đăng ký
+                </button>
+                
               </Link>
-            </div> */}
+              <Link to="/auth/login" className="font-weight-bold ml-2" id="kt_login_signup">
+                <button type="button" className="btn btn-primary">
+                  Đăng nhập
+                </button>
+              </Link>
+              
+              
+            </div>
             {/*end::Content header*/}
 
             {/* begin::Content body */}
@@ -193,26 +205,15 @@ export function AuthPage() {
               <Switch>
                 <ContentRoute
                   children={null}
-                  path={'/auth/login/identifier'}
-                  component={LoginUsername}
+                  path={'/auth/login'}
+                  component={LoginPage}
                   render={null}
                 />
-                <ContentRoute
-                  children={null}
-                  path={'/auth/login/challenge'}
-                  component={LoginPassword}
-                  render={null}
-                />
-                <ContentRoute
-                  children={null}
-                  path={'/auth/forgot-password'}
-                  component={ForgotPassword}
-                  render={null}
-                />
+                
                 <ContentRoute
                   children={null}
                   path={'/auth/registration'}
-                  component={LoginUsername}
+                  component={RegisterPage}
                   render={null}
                 />
               </Switch>

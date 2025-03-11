@@ -77,6 +77,38 @@ export default function AboutPage() {
         return userInfo._certificate && !userInfo._preLoggedIn && unexpired();
       };
 
+
+    // const isLoggedInAndUnexpired = () => {
+    //     // Check if user info exists
+    //     if (!userInfo || !userInfo.id) return false;
+        
+    //     // Check for certificate info
+    //     if (userInfo._certificate?.certificateInfo) {
+    //       try {
+    //         const expiredTime = new Date(userInfo._certificate.certificateInfo.timestamp);
+    //         expiredTime.setSeconds(expiredTime.getSeconds() + userInfo._certificate.certificateInfo.exp);
+    //         return expiredTime.getTime() > new Date().getTime();
+    //       } catch (e) {
+    //         console.error("Error checking expiration:", e);
+    //       }
+    //     }
+        
+    //     // Fallback: check for token in localStorage
+    //     const token = localStorage.getItem('accessToken');
+    //     if (token) {
+    //       try {
+    //         // Decode token to get expiration
+    //         const payload = JSON.parse(atob(token.split('.')[1]));
+    //         const expTime = payload.exp * 1000; // Convert to milliseconds
+    //         return expTime > Date.now();
+    //       } catch (e) {
+    //         console.error("Error parsing token:", e);
+    //       }
+    //     }
+        
+    //     return false;
+    //   };
+
     const getImageAfSelected = () => {
         switch (afSelected) {
             case 1:
@@ -265,4 +297,3 @@ const AFFChild: React.FC<AFFChildProps> = (props) => {
         </button>
     )
 }
-  

@@ -1,30 +1,27 @@
-import React, {Component} from 'react';
-import {connect, RootStateOrAny} from 'react-redux';
-import {Redirect, useLocation} from 'react-router-dom';
-import {LayoutSplashScreen} from "../../../layout/_core/metronic-splash-screen";
-import * as auth from '../_redux/auth-redux';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom"; // Changed from useNavigate to useHistory
+import * as auth from "../_redux/auth-redux";
 
-interface LogoutProps {
-  _certificate?: any;
-  logout: () => void;
-  location: any;
-}
-
-export class Logout extends Component<LogoutProps> {
-  componentDidMount() {
-    this.props.logout();
-  }
+const Logout = () => {
+  const dispatch = useDispatch();
+  const history = useHistory(); // Changed from navigate to history
   
-  render() {
-    const callbackUrl = this.props.location?.state?.callbackUrl;
+  useEffect(() => {
+    // Clear localStorage
+    localStorage.removeItem("accessToken");
     
-    const {_certificate} = this.props;
-    return _certificate ? (
-      <LayoutSplashScreen/>
-    ) : (
-      <Redirect to={'/auth/login?callbackUrl=' + callbackUrl}/>
-    );
-  }
-}
+    // Clear Redux store by dispatching logout action
+    dispatch(auth.actions.logout());
+    
+    // Redirect to login page
+    history.push("/auth/login"); // Changed from navigate() to history.push()
+    
+    console.log("User logged out successfully");
+  }, [dispatch, history]); // Updated dependency array
 
-export default connect(({auth}: { auth: RootStateOrAny }) => auth, auth.actions)(Logout);
+  // Return loading indicator or null while the redirect is happening
+  return <div>Logging out...</div>;
+};
+
+export default Logout;

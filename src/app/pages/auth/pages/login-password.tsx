@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { connect, RootStateOrAny, useSelector } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import * as auth from '../_redux/auth-redux';
-import { GetCredential, Ping } from '../_redux/auth.service';
+// import { GetCredential, Ping } from '../_redux/auth.service';
 import { GenerateCertificate, SymmetricDecrypt } from '../service/auth-cryptography';
 import { CERTIFICATE_EXP } from '../../../common-library/common-consts/enviroment';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -100,52 +100,52 @@ const LoginPassword = (props: {
     { setStatus, setSubmitting }: { setStatus: any; setSubmitting: any },
   ) => {
     setLoading(true);
-    setTimeout(() => {
-      GetCredential(userInfo.username)
-        .then(response => {
-          const { encryptedPrivateKey, publicKey } = response.data;
-          const _privateKey = SymmetricDecrypt(encryptedPrivateKey, values.password);
-          const certificate = GenerateCertificate(
-            {
-              id: response.data.id,
-              timestamp: new Date().getTime(),
-              exp: CERTIFICATE_EXP,
-            },
-            _privateKey,
-          );
-          props.saveUserInfo({
-            ...response.data,
-            _certificate: certificate,
-            _preLoggedIn: true,
-            _privateKey,
-          });
-          Ping()
-            .then((res: { data: any }) => {
-              props.saveUserInfo({
-                ...res.data,
-                _certificate: certificate,
-                _privateKey,
-                _preLoggedIn: false,
-              });
-            })
-            .catch((err: any) => {
-              setLoading(false);
-              setSubmitting(false);
-              console.log({ err });
-              props.savePingErrorData(err);
-            });
-        })
-        .catch(err => {
-          console.log(err);
-          setLoading(false);
-          setSubmitting(false);
-          setStatus(
-            intl.formatMessage({
-              id: 'AUTH.VALIDATION.INVALID_PASSWORD',
-            }),
-          );
-        });
-    }, 200);
+    // setTimeout(() => {
+    //   GetCredential(userInfo.username)
+    //     .then(response => {
+    //       const { encryptedPrivateKey, publicKey } = response.data;
+    //       const _privateKey = SymmetricDecrypt(encryptedPrivateKey, values.password);
+    //       const certificate = GenerateCertificate(
+    //         {
+    //           id: response.data.id,
+    //           timestamp: new Date().getTime(),
+    //           exp: CERTIFICATE_EXP,
+    //         },
+    //         _privateKey,
+    //       );
+    //       props.saveUserInfo({
+    //         ...response.data,
+    //         _certificate: certificate,
+    //         _preLoggedIn: true,
+    //         _privateKey,
+    //       });
+    //       Ping()
+    //         .then((res: { data: any }) => {
+    //           props.saveUserInfo({
+    //             ...res.data,
+    //             _certificate: certificate,
+    //             _privateKey,
+    //             _preLoggedIn: false,
+    //           });
+    //         })
+    //         .catch((err: any) => {
+    //           setLoading(false);
+    //           setSubmitting(false);
+    //           console.log({ err });
+    //           props.savePingErrorData(err);
+    //         });
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       setLoading(false);
+    //       setSubmitting(false);
+    //       setStatus(
+    //         intl.formatMessage({
+    //           id: 'AUTH.VALIDATION.INVALID_PASSWORD',
+    //         }),
+    //       );
+    //     });
+    // }, 200);
   };
 
   const formik = useFormik({

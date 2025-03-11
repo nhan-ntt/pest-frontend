@@ -6,27 +6,21 @@ import { connect, useSelector, RootStateOrAny } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   TextField,
-  createStyles,
   FormControl,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  Theme,
   Card,
 } from '@material-ui/core';
 import * as auth from '../_redux/auth-redux';
-// eslint-disable-next-line no-restricted-imports
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 import ErrorIcon from '@material-ui/icons/Error';
-
-import { CERTIFICATE_EXP } from '../../../common-library/common-consts/enviroment';
 import { Login } from '../_redux/auth.service';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
-// import clsx from 'clsx';
 
 const initialValues = {
   username: '',
@@ -34,26 +28,24 @@ const initialValues = {
   showPassword: false,
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& > *': {
-        backgroundColor: 'white',
-      },
-      display: 'flex',
-      flexWrap: 'wrap',
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      backgroundColor: 'white',
     },
-    margin: {
-      margin: theme.spacing(1),
-    },
-    withoutLabel: {
-      marginTop: theme.spacing(3),
-    },
-    textField: {
-      width: '25ch',
-    },
-  }),
-);
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+  withoutLabel: {
+    marginTop: theme.spacing(3),
+  },
+  textField: {
+    width: '25ch',
+  },
+}));
 
 interface State {
   password: string;
@@ -61,7 +53,7 @@ interface State {
   username: string;
 }
 
-const LoginUsername = (props: {
+const LoginPage = (props: {
   saveUserInfo?: any;
   intl?: any;
   location?: any;
@@ -71,6 +63,7 @@ const LoginUsername = (props: {
   const history = useHistory();
   const { search } = window.location;
   let callbackUrl = new URLSearchParams(search).get('callbackUrl');
+  callbackUrl = callbackUrl || '/';
   const userInfo = useSelector(({ auth }: { auth: RootStateOrAny }) => auth);
 
   const [loading, setLoading] = useState(false);
@@ -87,7 +80,6 @@ const LoginUsername = (props: {
     username: Yup.string()
       .min(3, 'Minimum 3 symbols')
       .max(256, 'Maximum 256 symbols')
-
       .required(
         intl.formatMessage({
           id: 'AUTH.VALIDATION.REQUIRED_FIELD',
@@ -115,7 +107,7 @@ const LoginUsername = (props: {
     };
   }, []);
 
-  const submitUsername = (
+  const submitLogin = (
     { username, password }: { username: string; password: string },
     { setStatus, setSubmitting }: { setStatus: any; setSubmitting: any },
   ) => {
@@ -123,21 +115,39 @@ const LoginUsername = (props: {
     setTimeout(() => {
       Login(username, password)
         .then((response: any) => {
-          console.log('response', response);
-          if (!response['success']) {
-            setLoading(false);
-            setSubmitting(false);
-            setStatus(
-              intl.formatMessage({
-                id: response?.reason,
-              }),
-            );
-            return;
-          } 
+          try {
+            // Store token in localStorage
+            const accessToken = response.accessToken;
+            localStorage.setItem('accessToken', accessToken);
             
+            // Calculate expiration time
+            const expiresIn = response.expiresIn || 86400; // 24 hours in seconds
+            const timestamp = Date.now();
+            
+            // Save user info to Redux store with properly formatted certificate
+            props.saveUserInfo({
+              id: response.id,
+              fullName: response.fullName,
+              email: response.email,
+              role: response.role,
+              accessToken,
+              _certificate: {
+                certificateInfo: {
+                  timestamp,
+                  exp: parseInt(expiresIn)
+                }
+              },
+              _preLoggedIn: false,
+              isAuthenticated: true
+            });
+            
+            // Navigate to callback URL
+          } catch (error) {
+            console.error("Error saving user info", error);
+          }
         })
         .catch(err => {
-          console.log('err', err);
+          console.log('Login error:', err);
           setLoading(false);
           setSubmitting(false);
           setStatus(
@@ -152,7 +162,7 @@ const LoginUsername = (props: {
   const formik = useFormik({
     initialValues,
     validationSchema: LoginSchema,
-    onSubmit: submitUsername,
+    onSubmit: submitLogin,
   });
   const errorMessage = new URLSearchParams(search).get('errorMessage');
 
@@ -215,10 +225,6 @@ const LoginUsername = (props: {
 
           {/* PWD */}
           <div className="form-group fv-plugins-icon-container">
-            {/* <InputLabel htmlFor="outlined-adornment-password">
-            <FormattedMessage id="AUTH.LOGIN.PASSWORD" />
-          </InputLabel> */}
-
             <FormControl className={' w-100'} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
               <OutlinedInput
@@ -246,13 +252,6 @@ const LoginUsername = (props: {
                 <div className="fv-help-block">{formik.errors.password}</div>
               </div>
             ) : null}
-            {/* {formik.status ? (
-            <span className="text-danger font-weight-bold ml-3">{formik.status}</span>
-          ) : (
-            userInfo._error && (
-              <span className="text-danger font-weight-bold ml-3">{userInfo._error}</span>
-            )
-          )} */}
           </div>
 
           <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
@@ -281,4 +280,4 @@ const LoginUsername = (props: {
   );
 };
 
-export default injectIntl(connect(null, auth.actions)(LoginUsername));
+export default injectIntl(connect(null, auth.actions)(LoginPage));

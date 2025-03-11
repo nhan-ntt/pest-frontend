@@ -2,7 +2,7 @@
     "Network Error": "Cá mập cắn đứt cáp quang rồi đại vương ơi !",
     "USER.ACCOUNT_INFO": "Thông tin tài khoản",
     "MODULE.NAME": " ",
-    " ": "",
+    " ": " ",
     "HOME_PAGE.SLOGAN": "iFAWcast Admin - Make your life better",
     "COMMON.MODULE_NAME": "Module",
     "COMMON_COMPONENT.MASTER_HEADER.SEARCH_BTN": "Tìm kiếm",
@@ -188,5 +188,6 @@
     "WARNING.FORECAST.DATE": "Ngày",
     "WARNING.FORECAST.WARNING_LEVEL": "Mức độ cảnh báo",
     "WARNING.FORECAST.PLANT_LEVEL": "Giai đoạn sinh trưởng của cây",
-    "WARNING.FORECAST.PEST_LEVEL": "Giai đoạn sinh trưởng của côn trùng"
+    "WARNING.FORECAST.PEST_LEVEL": "Giai đoạn sinh trưởng của côn trùng",
+    "Request failed with status code 400": "Yêu cầu không thành công với mã lỗi 400"
 }

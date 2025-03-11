@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../../common-library/common-consts/enviroment';
-import { GenerateKeyPairAndEncrypt } from '../auth/service/auth-cryptography';
 import {
   CountProps,
   CreateProps,
@@ -18,18 +17,10 @@ export const API_URL = API_BASE_URL + `/admin`;
 export const API_URL_USER = API_BASE_URL + `/user`;
 export const API_URL_ROLE = API_BASE_URL + `/role`;
 
+
+// Now your API calls don't need to include auth headers manually
 export const Create: CreateProps<any> = (data: any) => {
-   let { publicKey, privateKey, encryptedPrivateKey } = GenerateKeyPairAndEncrypt(data.password);
-    return axios.post(`${API_BASE_URL}/admin/create-user-web-app`, {
-    ...data,
-    city: data?.city?.name_with_type,
-    state: data?.state?.name_with_type,
-    district: data?.district?.name_with_type,
-    roleId: data.role._id,
-    publicKey,
-    encryptedPrivateKey,
-    isActive: true,
-  });
+  return axios.post(`${API_BASE_URL}/admin/users`, {...data});
 };
 
 export const GetAll: GetAllPropsServer<any> = ({ queryProps, sortList, paginationProps }) => {
@@ -41,12 +32,12 @@ export const GetAll: GetAllPropsServer<any> = ({ queryProps, sortList, paginatio
 };
 
 export const GetAllByAdmin: GetAllPropsServer<any> = ({ queryProps, sortList, paginationProps }) => {
-    return axios.post(`${API_BASE_URL}/admin/get-user`, {
-      queryProps,
-      sortList,
-      paginationProps,
-    });
-  };
+  return axios.post(`${API_BASE_URL}/admin/get-user`, {
+    queryProps,
+    sortList,
+    paginationProps,
+  });
+};
 
 export const Count: CountProps<UserModel> = queryProps => {
   return axios.post(`${API_URL}/get/count`, {
@@ -55,8 +46,6 @@ export const Count: CountProps<UserModel> = queryProps => {
 };
 
 export const GetById = (_id: string) => {
-  // return axios.post(`${API_URL_USER}/get-user-by-id`, { id: _id });
-
   return new Promise((resolve, reject) => {
     axios
       .post(`${API_URL_USER}/get-user-by-id`, { id: _id })
@@ -100,6 +89,12 @@ export const LookAccount: any = (id: string) => {
 };
 
 export const getRoles: any = (entity: any) => {
-  // console.log('entity', entity);
   return axios.post(`${API_BASE_URL}` + '/role/get-roles', entity);
 };
+
+export const getNamebyRole: any = (role: string) => {
+  return axios.post(`${API_BASE_URL}/role/name`, { role }, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });};

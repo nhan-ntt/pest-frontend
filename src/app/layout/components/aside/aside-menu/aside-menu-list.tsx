@@ -118,7 +118,7 @@ export function AsideMenuList({layoutProps}: any) {
   };
   return (
     <ul className={`menu-nav ${layoutProps.ulClasses}`}>
-      {store.getState().auth.role.role != "admin" ? MainRoutes.filter( r => !r.guard || r.guard(userInfo)).map((me, index) => {
+      {store.getState().auth.role != "admin" ? MainRoutes.filter( r => !r.guard || r.guard(userInfo)).map((me, index) => {
         return MenuItem(me, index);
       }) : AdminRoutes.filter( r => !r.guard || r.guard(userInfo)).map((me, index) => {
         return MenuItem(me, index);

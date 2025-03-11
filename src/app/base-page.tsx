@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useMemo } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { ChangeUserPassword } from './pages/auth/pages/change-user-password';
 import { LayoutSplashScreen } from './layout/_core/metronic-splash-screen';
 import { ContentRoute } from './layout/components/content/content-route';
 import { ToastContainer } from 'react-toastify';
@@ -40,16 +39,10 @@ export default function BasePage() {
 
       <Switch>
         {role != "admin" ? <Redirect exact from="/" to="/predict-management" /> : <Redirect exact from="/" to="/user-management" />}
-        <ContentRoute
-          children={null}
-          path="/change-password"
-          component={ChangeUserPassword}
-          render={null}
-        />
+        
         {routes.map(t => (
           <Route key={t.path} path={t.path} component={t.component} />
         ))}
-        {/* <Redirect to="/error/error-v1" /> */}
       </Switch>
     </Suspense>
   );
