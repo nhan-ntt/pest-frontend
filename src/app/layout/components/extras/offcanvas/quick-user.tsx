@@ -14,7 +14,7 @@ export function QuickUser() {
   const history = useHistory();
   // const user = useSelector((state: any) => state.auth);
   const user = useSelector(({ auth }: any) => auth);
-  console.log("dit me may1", user)
+  console.log("user state", user)
   const [isShow, setShowStatus] = useState(false);
 
   const location = window.location;
@@ -58,7 +58,7 @@ export function QuickUser() {
           </div>
           <div className="d-flex flex-column">
             <a href="#" className="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">
-              {user.name}
+              {user.fullName}
             </a>
             <div className="text-muted mt-1">{user?.role?.name ?? "Admin"}</div>
             <div className="navi mt-2">

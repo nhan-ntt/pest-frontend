@@ -48,9 +48,11 @@ const headerTitle = 'COMMON.MASTER.FILTER';
 
 function Report() {
   const intl = useIntl();
+
     
-  const currentUser = store.getState().auth;
-    
+  const currentUser = useSelector((state: RootStateOrAny) => state.auth);
+
+
   const {
     entities,
     deleteEntity,
@@ -170,8 +172,12 @@ function Report() {
             history.push(`${window.location.pathname}/${entity._id}/view`);
             // setShowDetail(true);
           },
+
+          // only the user who created can edit the report
+
           onEdit: (entity: any) => {
-            if (entity.user._id != currentUser._id) {
+            console.log("currentUser la", currentUser);
+            if (entity.user._id != currentUser.id) {
                 setShowNotify(true);
                 return;
             }    
@@ -203,7 +209,9 @@ function Report() {
             history.push(`${window.location.pathname}/${entity._id}/edit`);
           },
           onDelete: (entity: any) => {
-            if (entity.user._id != currentUser._id) {
+            if (entity.user._id != currentUser.id) {
+                console.log("entity.user._id", entity.user._id);
+                console.log("currentUser._id", currentUser.id);
                 setShowNotify(true);
                 return;
             }  

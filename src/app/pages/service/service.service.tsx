@@ -2,12 +2,16 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../common-library/common-consts/enviroment';
 // import _ from 'lodash';
 
+
+
 export const GetProvince: any = (code: string) => {
   return axios.post(`${API_BASE_URL}/user/get-address-info`, {
     type: 'state',
     parentCode: code || '0'
   });
 };
+
+
 
 export const GetDistrict: any = (code: string) => {
   return axios.post(`${API_BASE_URL}/user/get-address-info`, {

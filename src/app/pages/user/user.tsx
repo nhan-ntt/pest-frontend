@@ -23,12 +23,14 @@ import {
   BanUser,
   Count,
   Create,
+  createWithTransform,
   Delete,
   DeleteMany,
   Get,
   GetAll,
   GetAllByAdmin,
   Update,
+  updateWithTransform,
   GetById,
   LookAccount,
   getRoles,
@@ -108,11 +110,11 @@ function User() {
   } = InitMasterProps<any>({
     getServer: Get,
     countServer: Count,
-    createServer: Create,
+    createServer: createWithTransform,
     deleteServer: Delete,
     deleteManyServer: DeleteMany,
     getAllServer: userRole != "admin"? GetAll : GetAllByAdmin,
-    updateServer: Update,
+    updateServer: updateWithTransform, // Use the transform function
   });
 
   const [currentTab, setCurrentTab] = useState<string | undefined>('0');

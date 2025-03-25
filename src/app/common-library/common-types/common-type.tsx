@@ -168,6 +168,7 @@ export type SearchModel = {
     name?: string;
     showTime?: boolean;
     option?: Array<any>;
+    sort?: boolean;
   };
 };
 

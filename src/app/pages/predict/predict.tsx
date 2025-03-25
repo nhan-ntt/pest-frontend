@@ -234,7 +234,7 @@ function Predict() {
             // setShowDetail(true);
           },
           onEdit: (entity: any) => {
-            if (entity.user != currentUser._id) {
+            if (entity.user != currentUser.id) {
                 setShowNotify(true);
                 return;
             }
@@ -300,7 +300,7 @@ function Predict() {
             history.push(`${window.location.pathname}/${entity._id}/edit`);
           },
             onDelete: (entity: any) => {
-            if (entity.user != currentUser._id) {
+            if (entity.user != currentUser.id) {
                 setShowNotify(true);
                 return;
             }
@@ -563,6 +563,7 @@ function Predict() {
         onChange: value => onChangeValueCity(value),
         value: currentState,
         keyField: 'name_with_type',
+        sort: true,
       },
       city: {
         type: 'search-select',
@@ -573,6 +574,7 @@ function Predict() {
         onChange: value => onChangeValueDistrict(value),
         value: currentCity,
         keyField: 'name_with_type',
+        sort: true,
       },
       district: {
         type: 'search-select',
@@ -583,6 +585,7 @@ function Predict() {
         onChange: value => onChangeValueWards(value),
         value: currentDistrict,
         keyField: 'name_with_type',
+        sort: true,
       },
       timeStart: {
         type: 'date-time-range',

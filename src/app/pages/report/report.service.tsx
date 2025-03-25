@@ -11,17 +11,26 @@ import {
 } from '../../common-library/common-types/common-type';
 import { formatParamsGet, removeValueFromObject } from '../../common-library/helpers/axios-slice';
 
+import store from '../../../redux/store';
+
+
 export const API_URL = API_BASE_URL + `/report`;
 export const API_URL_PREDICT = API_BASE_URL + `/predict`;
 export const API_URL_PLAN = API_BASE_URL + `/plan`;
 
 export const Create: CreateProps<any> = async (data: any) => {
   console.log('running false');
+
+  const auth = store.getState().auth;
+  console.log("Auth state:", auth);
+
   let payload = { ...data };
   if (payload?.city) payload.city = data.city.name_with_type;
   if (payload?.state) payload.state = data.state.name_with_type;
   if (payload?.district) payload.district = data.district.name_with_type;
   if (payload?.pestLevel) payload.pestLevel = data.pestLevel.value;  
+  
+  payload.userId = auth.id;
 
   payload = removeValueFromObject(payload, null);
 
@@ -35,6 +44,8 @@ export const GetAll: GetAllPropsServer<any> = ({ queryProps, sortList, paginatio
     paginationProps,
   });
 };
+
+
 export const CreateReportAPI = (data: {
   state: string;
   city: string;
@@ -50,6 +61,8 @@ export const CreateReportAPI = (data: {
     note: data?.note ?? '',
   });
 };
+
+
 export const GetById = (_id: string) => {
   return new Promise((resolve, reject) => {
     axios

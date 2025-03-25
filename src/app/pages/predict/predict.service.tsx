@@ -17,49 +17,21 @@ export const API_URL = API_BASE_URL + `/predict`;
 export const API_URL_PLAN = API_BASE_URL + `/plan`;
 
 export const Create: CreateProps<any> = async (data: any) => {
-  // Get the current user ID from Redux store or localStorage
   const auth = store.getState().auth;
   console.log("Auth state:", auth);
-  
-  // // First try the standard location
-  // let userId = auth?.id;
-  
-  // // If not found, try alternative locations
-  // if (!userId) {
-  //   userId = auth?.user?.id || auth?.user?._id || auth?._id || localStorage.getItem('userId');
-  //   console.log("Using alternative userId:", userId);
-  // }
-  // console.log("Final userId:", userId);
-  
+
   let payload = { ...data };
   if (payload) {
     payload.state = data?.state?.name_with_type;
     payload.city = data?.city?.name_with_type;
     payload.district = data?.district?.name_with_type;
     payload.pestLevelId = data?.lastPestLevel?._id;
-    payload.user = auth;
-    
-    // Make sure timeStart is set
-    if (!payload.timeStart) {
-      payload.timeStart = new Date().toISOString();
-    }
+    payload.userId = auth.id;
+
   }
-  
-  // Now validate all required fields
-  if (!payload.state || !payload.city || !payload.district || !payload.timeStart || !payload.user) {
-    console.error("Missing required fields:", {
-      state: !!payload.state,
-      city: !!payload.city, 
-      district: !!payload.district,
-      timeStart: !!payload.timeStart,
-      user: !!payload.user
-    });
-    return Promise.reject(new Error("PREDICT.POST.INVALID_PARAMS"));
-  }
-  
-  console.log("Sending final payload to API:", payload);
   return axios.post(`${API_URL}`, payload);
 };
+
 
 export const getPestLevelApi = () => {
   return axios.post(`${API_BASE_URL}/pestLevel/get-pest-level`);
